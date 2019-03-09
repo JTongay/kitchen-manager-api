@@ -1,7 +1,7 @@
 {
-  "name": "typescript-express-api-starter",
+  "name": "kitchen-manager-api",
   "version": "1.0.0",
-  "description": "a template for creating API's using express written in typescript",
+  "description": "the api for my own kitchen manager",
   "main": "app.js",
   "scripts": {
     "test": "node_modules/.bin/jest --watch",

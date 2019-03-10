@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import { PingRoute } from './ping';
 import { BaseRoute } from './route';
 import { AuthRoutes } from './Auth.routes';
+import { RecipesRoutes } from './Recipes.routes';
 
 /**
  * / route
@@ -48,6 +49,7 @@ export class ApiRoutes extends BaseRoute {
     this.router.get('/', this.get);
     this.router.use(PingRoute.path, PingRoute.router);
     this.router.use('/user', UsersRoutes.router);
+    this.router.use('/user/:user_id/recipe', RecipesRoutes.router);
     this.router.use('/auth', AuthRoutes.router);
   }
 

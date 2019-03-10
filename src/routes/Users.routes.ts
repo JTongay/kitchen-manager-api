@@ -50,7 +50,7 @@ export class UsersRoutes extends BaseRoute {
 
     this.router.get('/', this.getUsers);
     this.router.get('/:id', this._userProfile.checkUser, this.getUser);
-    this.router.post('/', this.createUser);
+    this.router.post('/', this._userProfile.checkUser, this.createUser);
   }
 
   private async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -67,16 +67,13 @@ export class UsersRoutes extends BaseRoute {
     }
   }
 
+  /**
+   * Gets its user data from the UserProfile service (req.data)
+   * @param req ValidatedDataRequest
+   * @param res Response
+   * @param next NextFunction
+   */
   private async getUser(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
-    // let user: IUser;
-    // const userId: string = req.params.id;
-    // try {
-    //   user = await this._usersController.getUserById(userId);
-    //   res.status(200).json(user);
-    // } catch (e) {
-    //   logger.error(`Error GET /users${userId} with ${e}`);
-    //   next(e);
-    // }
     res.status(200).json(req.data);
   }
 

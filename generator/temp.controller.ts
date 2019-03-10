@@ -2,7 +2,7 @@ import { <%= IName %> } from '@controllers/types';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
-injectable();
+@injectable()
 export class <%= upCaseName %>Controller implements <%= IName %> {
 
 }

@@ -9,10 +9,14 @@ import { IUserRoleService } from '@/services/types';
 
 import { UserProfileService } from '@/services';
 import { IUserProfileService } from '@/services/types';
+
+import { RecipesController } from '@/controllers';
+import { IRecipesController } from '@/controllers/types';
 import { Container } from 'inversify';
 import { TYPES } from './inversify.types';
 
 const container: Container = new Container();
+container.bind<IRecipesController>(TYPES.IRecipesController).to(RecipesController);
 container.bind<IUserProfileService>(TYPES.IUserProfileService).to(UserProfileService);
 container.bind<IUserRoleService>(TYPES.IUserRoleService).to(UserRoleService);
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);

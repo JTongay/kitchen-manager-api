@@ -15,8 +15,8 @@ export interface Equipment {
 
 export interface IRecipe extends mongoose.Document {
   created_by: any;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
   equipment: Equipment;
   ingredients: Ingredient[];
   instructions: string;

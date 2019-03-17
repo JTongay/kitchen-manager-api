@@ -14,10 +14,10 @@ export class UsersController implements IUsersController {
     this._authService = authService;
   }
 
-  public async getUsers(): Promise<IUser[]> {
+  public async getUsers(recipes?: boolean): Promise<IUser[]> {
     let response: IUser[];
     try {
-      response = await User.find();
+      response = recipes ? await User.find().populate('recipes') : await User.find();
       return response;
     } catch (e) {
       throw new Error(e);
@@ -35,10 +35,8 @@ export class UsersController implements IUsersController {
   }
 
   public async getUserById(id: string): Promise<IUser> {
-    let response: IUser;
     try {
-      response = await User.findOne({_id: id});
-      return response;
+      return await User.findById({ _id: id });
     } catch (e) {
       throw new Error(e);
     }
@@ -54,5 +52,4 @@ export class UsersController implements IUsersController {
       throw new Error(e);
     }
   }
-
 }

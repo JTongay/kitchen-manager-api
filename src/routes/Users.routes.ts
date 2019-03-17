@@ -50,13 +50,14 @@ export class UsersRoutes extends BaseRoute {
 
     this.router.get('/', this.getUsers);
     this.router.get('/:id', this._userProfile.checkUser, this.getUser);
-    this.router.post('/', this._userProfile.checkUser, this.createUser);
+    this.router.post('/', this.createUser);
   }
 
   private async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     let users: IUser[];
+    const { recipes } = req.query;
     try {
-      users = await this._usersController.getUsers();
+      users = await this._usersController.getUsers(recipes);
       const successResponse: SuccessResponse = new SuccessResponseBuilder(200)
         .setData(users)
         .build();
@@ -81,7 +82,6 @@ export class UsersRoutes extends BaseRoute {
     let userRequest: UserRequest;
     const { username, password }: RequestBody = req.body;
     try {
-      console.log(req.body, 'username in route');
       userRequest = new UserRequestBuilder(username, password).build();
       await this._usersController.addUser(userRequest);
       res.status(200).json({'status': 'success'});

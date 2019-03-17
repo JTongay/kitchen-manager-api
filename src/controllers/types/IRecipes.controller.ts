@@ -1,6 +1,7 @@
 import { IRecipe } from '@/models';
 
 export interface IRecipesController {
-  getRecipes(): Promise<IRecipe[]>;
-  getRecipeById(id: string): Promise<IRecipe>;
+  getRecipes(user?: boolean): Promise<IRecipe[]>;
+  getRecipeById(id: string, user?: boolean): Promise<IRecipe>;
+  createRecipe(recipe: any): Promise<any>;
 }

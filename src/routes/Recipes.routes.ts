@@ -5,6 +5,9 @@ import { IRecipe } from '@/models';
 import { IRecipesController } from '@/controllers/types';
 import { container } from '@/inversify.config';
 import { TYPES } from '@/inversify.types';
+import { checkUser } from '@/middleware/checkUser';
+import { ValidatedDataRequest } from '@/types';
+import { SuccessResponseBuilder, SuccessResponse } from '@/builders/response';
 
 
 export class RecipesRoutes extends BaseRoute {
@@ -33,17 +36,37 @@ export class RecipesRoutes extends BaseRoute {
     logger.info('Creating RecipesRoutes');
 
     this.router.get('/', this.getRecipes);
+    this.router.get('/:recipe_id', this.getRecipeById);
     // Insert Route methods here
   }
 
   private async getRecipes(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const recipes: IRecipe[] = await this._recipesController.getRecipes();
-    res.status(200).json(recipes);
+    const { user } = req.params;
+    let recipes: IRecipe[];
+    try {
+      recipes = await this._recipesController.getRecipes(user);
+      const successResponse: SuccessResponse = new SuccessResponseBuilder(200).setData(recipes).build();
+      res.status(200).json(successResponse);
+    } catch (e) {
+      logger.error(`Error GET /recipes with ${e}`);
+      next(e);
+    }
   }
 
-  private async getRecipeById(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async getRecipeById(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
     const { user_id, recipe_id } = req.params;
-    const recipe: IRecipe = await this._recipesController.getRecipeById(recipe_id);
-    res.status(200).json(recipe);
+    let recipe: IRecipe;
+    try {
+      recipe = await this._recipesController.getRecipeById(recipe_id);
+      const successResponse: SuccessResponse = new SuccessResponseBuilder(200).setData(recipe).build();
+      res.status(200).json(recipe);
+    } catch (e) {
+      logger.info(`Error GET /recipe/:id with ${e}`);
+      next(e);
+    }
+  }
+
+  private async createRecipe(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
+    // const { }
   }
 }

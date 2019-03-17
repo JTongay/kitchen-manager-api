@@ -7,7 +7,7 @@ export interface IUser extends mongoose.Document {
   password: string;
   created_at: Date;
   updated_at: Date;
-  recipes: IRecipe[];
+  recipes: IRecipe;
 }
 
 export const UserSchema: mongoose.Schema = new mongoose.Schema({

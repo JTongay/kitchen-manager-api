@@ -10,6 +10,8 @@ import { SuccessResponse, SuccessResponseBuilder } from '@/builders/response';
 import { checkUser } from '@/middleware/checkUser';
 import { ValidatedDataRequest } from '@/types';
 import { IUserProfileService } from '@/services/types';
+import { ValidateRequiredUser } from '@/middleware/required-fields/user';
+import { validationResult } from 'express-validator/check';
 
 interface RequestBody {
   username: string;
@@ -50,7 +52,7 @@ export class UsersRoutes extends BaseRoute {
 
     this.router.get('/', this.getUsers);
     this.router.get('/:id', this._userProfile.checkUser, this.getUser);
-    this.router.post('/', this.createUser);
+    this.router.post('/', ValidateRequiredUser, this.createUser);
   }
 
   private async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -75,12 +77,22 @@ export class UsersRoutes extends BaseRoute {
    * @param next NextFunction
    */
   private async getUser(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
-    res.status(200).json(req.data);
+    if (req.data) {
+      const successResponse: SuccessResponse = new SuccessResponseBuilder(200).setData(req.data).build();
+      res.status(200).json(successResponse);
+    } else {
+      next();
+    }
   }
 
   private async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     let userRequest: UserRequest;
     const { username, password }: RequestBody = req.body;
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      res.status(422).json({ errors: errors.array() });
+    }
     try {
       userRequest = new UserRequestBuilder(username, password).build();
       await this._usersController.addUser(userRequest);

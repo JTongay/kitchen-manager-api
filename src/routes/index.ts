@@ -10,6 +10,7 @@ import { container } from '@/inversify.config';
 import { TYPES } from '@/inversify.types';
 import { RecipeRequestBuilder, RecipeRequest } from '@/builders/request/Recipe.request';
 import { Ingredient, Equipment, IRecipe } from '@/models';
+import { InventoryRoutes } from './Inventory.routes';
 
 /**
  * / route
@@ -31,9 +32,6 @@ export class ApiRoutes extends BaseRoute {
     super();
     this._recipesController = recipesController;
     this.get = this.get.bind(this);
-    this.postRecipe = this.postRecipe.bind(this);
-    this.deleteRecipe = this.deleteRecipe.bind(this);
-    this.getRecipes = this.getRecipes.bind(this);
     this.init();
   }
 
@@ -64,6 +62,7 @@ export class ApiRoutes extends BaseRoute {
     this.router.use(PingRoute.path, PingRoute.router);
     this.router.use('/user', UsersRoutes.router);
     this.router.use('/user/:user_id/recipe', RecipesRoutes.router);
+    this.router.use('/user/:user_id/inventory', InventoryRoutes.router);
     this.router.use('/auth', AuthRoutes.router);
   }
 

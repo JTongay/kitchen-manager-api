@@ -37,6 +37,9 @@ export class RecipesRoutes extends BaseRoute {
 
     this.router.get('/', this.getRecipes);
     this.router.get('/:recipe_id', this.getRecipeById);
+    this.router.post('/', this.createRecipe);
+    this.router.put('/:recipe_id', this.updateRecipe);
+    this.router.delete('/:recipe_id', this.deleteRecipe);
     // Insert Route methods here
   }
 
@@ -59,7 +62,7 @@ export class RecipesRoutes extends BaseRoute {
     try {
       recipe = await this._recipesController.getRecipeById(recipe_id);
       const successResponse: SuccessResponse = new SuccessResponseBuilder(200).setData(recipe).build();
-      res.status(200).json(recipe);
+      res.status(200).json(successResponse);
     } catch (e) {
       logger.info(`Error GET /recipe/:id with ${e}`);
       next(e);
@@ -68,5 +71,20 @@ export class RecipesRoutes extends BaseRoute {
 
   private async createRecipe(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
     // const { }
+    let createdRecipe: IRecipe;
+    try {
+      createdRecipe = await this._recipesController.createRecipe(req.body);
+    } catch (e) {
+      logger.error(`Error creating recipe ${e}`);
+      next(e);
+    }
+  }
+
+  private async updateRecipe(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
+
+  }
+
+  private async deleteRecipe(req: ValidatedDataRequest, res: Response, next: NextFunction): Promise<void> {
+
   }
 }

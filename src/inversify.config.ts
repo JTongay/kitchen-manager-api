@@ -12,10 +12,14 @@ import { IUserProfileService } from '@/services/types';
 
 import { RecipesController } from '@/controllers';
 import { IRecipesController } from '@/controllers/types';
+
+import { InventoryController } from '@/controllers';
+import { IInventoryController } from '@/controllers/types';
 import { Container } from 'inversify';
 import { TYPES } from './inversify.types';
 
 const container: Container = new Container();
+container.bind<IInventoryController>(TYPES.IInventoryController).to(InventoryController);
 container.bind<IRecipesController>(TYPES.IRecipesController).to(RecipesController);
 container.bind<IUserProfileService>(TYPES.IUserProfileService).to(UserProfileService);
 container.bind<IUserRoleService>(TYPES.IUserRoleService).to(UserRoleService);

@@ -1,4 +1,5 @@
 const TYPES = {
+  IInventoryController: Symbol.for('IInventoryController'),
   IRecipesController: Symbol.for('IRecipesController'),
   IUserProfileService: Symbol.for('IUserProfileService'),
   IUserRoleService: Symbol.for('IUserRoleService'),
